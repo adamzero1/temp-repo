@@ -12,32 +12,35 @@ jobs:
   matrix-calculator:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.result }}
+      php_versions: ${{ steps.set-matrix.outputs.php_versions }}
+      database_versions: ${{ steps.set-matrix.outputs.database_versions }}
     steps:
       - name: Checkout PR commit
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          path: main
           fetch-depth: 0
 
-      - uses: actions/github-script@v6
-        id: set-matrix
-        with:
-          script: |
-            return [8.11, 8.21]
+      - id: set-matrix
+        name: Calculate Matrix
+        run: |
+          echo "php_versions=$(jq -c .services.php supported-services.json)" >> "$GITHUB_OUTPUT"
+          echo "database_versions=$(jq -c .services.database supported-services.json)" >> "$GITHUB_OUTPUT"
 
       - name: Debug output
-        run: echo "${{ steps.set-matrix.outputs.result }}"
+        run: |
+          echo "PHP Versions: ${{ steps.set-matrix.outputs.php_versions }}"
+          echo "Database Versions: ${{ steps.set-matrix.outputs.database_versions }}"
     
   unit-tests:
     needs: matrix-calculator
     strategy:
       fail-fast: false
       matrix:
-        php_version: ${{ fromJSON(needs.matrix-calculator.outputs.matrix) }}
+        php_version: ${{ fromJSON(needs.matrix-calculator.outputs.php_versions) }}
+        db_version: ${{ fromJSON(needs.matrix-calculator.outputs.database_versions) }}
     runs-on: ubuntu-latest
     steps:
       - name: Debug
         run: |
-          echo "foooooo: ${{ matrix.php_version }}"
+          echo "Matrix: PHP:${{ matrix.php_version }} x ${{ matrix.database_version }}"
