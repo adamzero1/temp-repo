@@ -18,12 +18,13 @@ jobs:
         id: set-matrix
         with:
           script: |
-            return [8.11, 8.21];
+            return [8.11, 8.21]
 
       - name: Debug output
         run: echo "${{ steps.set-matrix.outputs.result }}"
     
   unit-tests:
+  needs: matrix-calculator
     strategy:
       fail-fast: false
       matrix:
