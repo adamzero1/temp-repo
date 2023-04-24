@@ -24,7 +24,7 @@ jobs:
         run: echo "${{ steps.set-matrix.outputs.result }}"
     
   unit-tests:
-  needs: matrix-calculator
+    needs: matrix-calculator
     strategy:
       fail-fast: false
       matrix:
