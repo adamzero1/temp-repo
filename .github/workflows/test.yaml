@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   run-unit-tests:
     uses: adamzero1/temp-repo2/.github/workflows/mageos-unit-tests.yml@remote-workflow
