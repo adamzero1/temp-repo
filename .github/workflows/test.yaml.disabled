@@ -1,0 +1,46 @@
+name: Unit Tests
+run-name: ${{ github.actor }} is running Unit Tests
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  matrix-calculator:
+    runs-on: ubuntu-latest
+    outputs:
+      php_versions: ${{ steps.set-matrix.outputs.php_versions }}
+      database_versions: ${{ steps.set-matrix.outputs.database_versions }}
+    steps:
+      - name: Checkout PR commit
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - id: set-matrix
+        name: Calculate Matrix
+        run: |
+          echo "php_versions=$(jq -c .services.php supported-services.json)" >> "$GITHUB_OUTPUT"
+          echo "database_versions=$(jq -c .services.database supported-services.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Debug output
+        run: |
+          echo "PHP Versions: ${{ steps.set-matrix.outputs.php_versions }}"
+          echo "Database Versions: ${{ steps.set-matrix.outputs.database_versions }}"
+    
+  unit-tests:
+    needs: matrix-calculator
+    strategy:
+      fail-fast: false
+      matrix:
+        php_version: ${{ fromJSON(needs.matrix-calculator.outputs.php_versions) }}
+        db_version: ${{ fromJSON(needs.matrix-calculator.outputs.database_versions) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug
+        run: |
+          echo "Matrix: PHP:${{ matrix.php_version }} x ${{ matrix.database_version }}"
