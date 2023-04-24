@@ -14,6 +14,13 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.result }}
     steps:
+      - name: Checkout PR commit
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: main
+          fetch-depth: 0
+
       - uses: actions/github-script@v6
         id: set-matrix
         with:
