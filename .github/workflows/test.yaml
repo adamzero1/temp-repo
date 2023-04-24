@@ -9,13 +9,26 @@ permissions:
   contents: write
 
 jobs:
+  matrix-calculator:
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.result }}
+    steps:
+      - uses: actions/github-script@v6
+        id: set-matrix
+        with:
+          script: |
+            return [8.11, 8.21];
+
+      - name: Debug output
+        run: echo "${{ steps.set-matrix.outputs.result }}"
+    
   unit-tests:
     strategy:
       fail-fast: false
       matrix:
-        php_version: [8.1,8.2]
+        php_version: ${{ fromJSON(needs.matrix-calculator.outputs.matrix) }}
     runs-on: ubuntu-latest
     steps:
       - name: Debug
         run: |
-          echo "foooooo"
+          echo "foooooo: ${{ matrix.php_version }}"
