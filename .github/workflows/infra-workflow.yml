@@ -120,3 +120,4 @@ jobs:
           echo "message_queue Versions: ${{ matrix.message_queue_version }}"
           echo "cache Versions: ${{ matrix.cache_version }}"
           echo "http_cache Versions: ${{ matrix.http_cache_version }}"
+          exit 123
