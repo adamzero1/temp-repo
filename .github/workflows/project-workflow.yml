@@ -1,0 +1,21 @@
+name: Integration Tests (Using Nx)
+run-name: ${{ github.actor }} is running Integration Tests
+on:
+  pull_request:
+    branches:
+      - 2.4-develop
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  call-workflow:
+    name: Calling Nx integration tests
+    uses: adamzero1/temp-repo/.github/workflows/infra-workflow.yml@main
+    secrets: inherit
+    with:
+      repository: ${{ github.repository }}
+      pr_head: ${{ github.event.pull_request.head.sha }}
+      pr_base: ${{ github.event.pull_request.base.ref }}

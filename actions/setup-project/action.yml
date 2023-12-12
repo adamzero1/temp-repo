@@ -1,0 +1,8 @@
+name: "Setup Project"
+runs:
+  using: "composite"
+  steps:
+    - name: Debug output
+      shell: bash
+      run: |
+        echo "blah"
