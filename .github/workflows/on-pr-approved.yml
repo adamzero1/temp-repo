@@ -20,7 +20,7 @@ jobs:
     steps:
     - run: |
         echo PR #${{ github.event.number }} has been merged
-        run: echo "$GITHUB_CONTEXT"
+        echo "$GITHUB_CONTEXT"
 
 # echo repo owner ${{ context.repo.owner }}
 # echo repo ${{ context.repo.repo }}
