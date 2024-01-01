@@ -21,10 +21,11 @@ jobs:
     - run: |
         echo PR #${{ github.event.number }} has been merged
         run: echo "$GITHUB_CONTEXT"
-        # echo repo owner ${{ context.repo.owner }}
-        # echo repo ${{ context.repo.repo }}
-        # echo ref ${{ context.sha }}
-        
+
+# echo repo owner ${{ context.repo.owner }}
+# echo repo ${{ context.repo.repo }}
+# echo ref ${{ context.sha }}
+
   close_job:
     # this job will only run if the PR has been closed without being merged
     if: github.event.pull_request.merged == false
