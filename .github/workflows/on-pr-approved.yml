@@ -18,9 +18,11 @@ jobs:
     env:
       GITHUB_CONTEXT: ${{ toJson(github) }}
       HEAD: ${{ github.event.pull_request.head.ref }}
+      BASE: ${{ github.event.pull_request.base.ref }}
+      PR: ${{ github.event.number }}
     steps:
     - run: |
-        echo "PR ${{ github.event.number }} has been merged"
+        echo "PR ${PR} has been merged: ${HEAD} => ${BASE}"
         echo "Base: ${{ github.event.pull_request.base.ref }}"
         echo "Head: ${{ github.event.pull_request.head.ref }}"
         echo HEAD "${{ github.event.head.sha }} (${HEAD})"
