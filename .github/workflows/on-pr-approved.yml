@@ -29,7 +29,7 @@ jobs:
           echo HEAD "${{ github.event.head.sha }} (${HEAD})"
           # echo repo owner ${{ github.event.base.sha }}
           # echo repo ${{ github.event.head.sha }}
-          # echo "$GITHUB_CONTEXT"
+          echo "$GITHUB_CONTEXT"
       - name: Create Tag
         uses: actions/github-script@v5
         with:
@@ -38,7 +38,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'refs/tags/v${{github.event.number}}',
-              sha: context.sha
+              sha: ${{github.event.pull_request.head.sha}}
             })
 
 # echo repo owner ${{ context.repo.owner }}
