@@ -20,7 +20,7 @@ jobs:
       HEAD: ${{ github.event.head.sha }}
     steps:
     - run: |
-        echo PR #${{ github.event.number }} has been merged
+        echo PR ${{ github.event.number }} has been merged
         echo HEAD ${{ github.event.head.sha }} (${HEAD})
         echo repo owner ${{ github.event.base.sha }}
         echo repo ${{ github.event.head.sha }}
