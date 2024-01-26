@@ -21,14 +21,25 @@ jobs:
       BASE: ${{ github.event.pull_request.base.ref }}
       PR: ${{ github.event.number }}
     steps:
-    - run: |
-        echo "PR ${PR} has been merged: ${HEAD} => ${BASE}"
-        echo "Base: ${{ github.event.pull_request.base.ref }}"
-        echo "Head: ${{ github.event.pull_request.head.ref }}"
-        echo HEAD "${{ github.event.head.sha }} (${HEAD})"
-        # echo repo owner ${{ github.event.base.sha }}
-        # echo repo ${{ github.event.head.sha }}
-        # echo "$GITHUB_CONTEXT"
+      - name: debug
+        run: |
+          echo "PR ${PR} has been merged: ${HEAD} => ${BASE}"
+          echo "Base: ${{ github.event.pull_request.base.ref }}"
+          echo "Head: ${{ github.event.pull_request.head.ref }}"
+          echo HEAD "${{ github.event.head.sha }} (${HEAD})"
+          # echo repo owner ${{ github.event.base.sha }}
+          # echo repo ${{ github.event.head.sha }}
+          # echo "$GITHUB_CONTEXT"
+      - name: Create Tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v${{github.event.number}}',
+              sha: context.sha
+            })
 
 # echo repo owner ${{ context.repo.owner }}
 # echo repo ${{ context.repo.repo }}
